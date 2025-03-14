@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Delivery Address</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex justify-center items-center h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-md w-96">
+        <h2 class="text-2xl font-bold mb-4">Enter Delivery Details 🏠</h2>
+
+        <label class="block mb-2 font-semibold">Receiver Name:</label>
+        <input type="text" id="receiver" class="w-full border p-2 rounded mb-4" placeholder="Enter full name">
+
+        <label class="block mb-2 font-semibold">Full Address:</label>
+        <textarea id="address" class="w-full border p-2 rounded mb-4" rows="3" placeholder="House No, Street, City, Pincode"></textarea>
+
+        <label class="block mb-2 font-semibold">Contact Number 📞:</label>
+        <input type="tel" id="contact" class="w-full border p-2 rounded mb-4" placeholder="Enter mobile number">
+
+        <label class="block mb-2 font-semibold">Landmark:</label>
+        <input type="text" id="landmark" class="w-full border p-2 rounded mb-4" placeholder="Nearby place (optional)">
+
+        <label class="block mb-2 font-semibold">Payment Method:</label>
+        <select id="payment" class="w-full border p-2 rounded mb-4">
+            <option value="COD">Cash on Delivery (COD)</option>
+            <option value="Prepaid">Prepaid (Online Payment)</option>
+        </select>
+<a href="checkout.html">
+        <button onclick="confirmOrder()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded">Confirm Order</button>
+    </a>
+    </div>
+
+    <script>
+        function confirmOrder() {
+            let receiver = document.getElementById("receiver").value.trim();
+            let address = document.getElementById("address").value.trim();
+            let contact = document.getElementById("contact").value.trim();
+            let landmark = document.getElementById("landmark").value.trim();
+            let payment = document.getElementById("payment").value;
+
+            if (!receiver || !address || !contact) {
+                alert("Please fill all required fields!");
+                return;
+            }
+
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let user = JSON.parse(localStorage.getItem("user"));
+            let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+            let newOrder = {
+                id: Date.now(),
+                user: user.username,
+                email: user.email,
+                receiver: receiver,
+                address: address,
+                contact: contact,
+                landmark: landmark,
+                payment: payment,
+                items: cart,
+                total: cart.reduce((sum, item) => sum + item.price, 0),
+                status: "Pending"
+            };
+
+            orders.push(newOrder);
+            localStorage.setItem("orders", JSON.stringify(orders));
+            localStorage.removeItem("cart");
+
+            alert("Order placed successfully! Delivery location confirmed. Please confirm payment .");
+
+            window.location.href = "dashboard.html"; // Redirect to Admin Dashboard
+        }
+    </script>
+</body>
+</html>

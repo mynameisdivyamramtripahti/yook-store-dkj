@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Yook Store</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f3f3f3;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        .cart-item:hover {
+            background: #f8f8f8;
+        }
+        .item-info {
+            display: flex;
+            align-items: center;
+        }
+        .item-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 15px;
+            border: 1px solid #ddd;
+        }
+        .item-details {
+            display: flex;
+            flex-direction: column;
+        }
+        .item-name {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .item-price {
+            font-size: 14px;
+            color: #b12704;
+        }
+        .place-order {
+            width: 100%;
+            padding: 12px;
+            background: #ff9900;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+        .place-order:hover {
+            background: #e68900;
+        }
+        .empty-cart {
+            text-align: center;
+            font-size: 18px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🛒 Your Shopping Cart</h2>
+        <div id="checkout-items"></div>
+        
+        <button class="place-order">Place Order</button>
+    </a>
+    <button onclick="logoutUser()" class="bg-red-500 text-white px-4 py-2 rounded">Logout</button>
+
+    <script>
+        function logoutUser() {
+            localStorage.removeItem("user");
+            alert("Logged out successfully!");
+            window.location.href = "login.html";
+        }
+    </script>
+    </div>
+   
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let checkoutContainer = document.getElementById("checkout-items");
+
+            if (cart.length === 0) {
+                checkoutContainer.innerHTML = "<p class='empty-cart'>Your cart is empty. 🛍️</p>";
+            } else {
+                cart.forEach((item) => {
+                    let cartItem = document.createElement("div");
+                    cartItem.classList.add("cart-item");
+                    cartItem.innerHTML = `
+                        <div class="item-info">
+                            <img src="${item.image || 'https://via.placeholder.com/60'}" class="item-img" alt="${item.name}">
+                            <div class="item-details">
+                                <p class="item-name">${item.name}</p>
+                                <p class="item-price">$${item.price}</p>
+                            </div>
+                        </div>
+                    `;
+                    checkoutContainer.appendChild(cartItem);
+                });
+            }
+
+            document.querySelector(".place-order").addEventListener("click", function () {
+                alert("🎉 Order Placed Successfully!");
+                localStorage.removeItem("cart");
+                checkoutContainer.innerHTML = "<p class='empty-cart'>Your order has been placed successfully. ✅</p>";
+            });
+        });
+    </script>
+<script src="cart.js"></script>
+</body>
+</html>

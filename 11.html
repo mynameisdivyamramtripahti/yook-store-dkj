@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yook Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    
+    <!-- Navbar -->
+    <nav class="bg-blue-600 p-4 text-white fixed w-full top-0 z-50 flex justify-between items-center shadow-lg">
+        <a href="#" class="text-xl font-bold">Yook Store</a>
+        <a href="#" class="text-lg">Home</a>
+        <div class="cart-icon relative cursor-pointer" onclick="toggleCart()">
+            🛒
+            <span class="cart-badge absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full" id="cart-count">0</span>
+        </div>
+    </nav>
+    
+    <!-- Product Section -->
+    <section class="mt-20 p-6 max-w-6xl mx-auto flex flex-col md:flex-row bg-white shadow-lg rounded-lg">
+        <div class="w-full md:w-1/2">
+            <img src="https://cdn.pixabay.com/photo/2013/07/13/14/07/apparel-162180_960_720.png" alt="Product Image" class="w-full rounded-lg">
+        </div>
+        <div class="w-full md:w-1/2 p-6 flex flex-col justify-center">
+            <h1 class="text-3xl font-bold">Product Name</h1>
+            <p class="text-lg text-gray-500 mt-2">$110.00</p>
+            <div class="mt-4">
+                <h2 class="text-lg font-semibold">Select Color:</h2>
+                <div class="flex space-x-2 mt-2">
+                    <span class="w-6 h-6 bg-black rounded-full cursor-pointer"></span>
+                    <span class="w-6 h-6 bg-red-500 rounded-full cursor-pointer"></span>
+                    <span class="w-6 h-6 bg-blue-500 rounded-full cursor-pointer"></span>
+                    <span class="w-6 h-6 bg-yellow-500 rounded-full cursor-pointer"></span>
+                </div>
+            </div>
+            <div class="mt-4">
+                <h2 class="text-lg font-semibold">Select Size:</h2>
+                <div class="flex space-x-2 mt-2">
+                    <button class="px-4 py-2 border rounded">S</button>
+                    <button class="px-4 py-2 border rounded">M</button>
+                    <button class="px-4 py-2 border rounded">L</button>
+                    <button class="px-4 py-2 border rounded">XL</button>
+                    <button class="px-4 py-2 border rounded">XXL</button>
+                </div>
+            </div>
+            <button onclick="addToCart('Product Name', 110)" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Add to Cart</button>
+        </div>
+    </section>
+    
+    <!-- Cart Sidebar -->
+    <div class="cart-container fixed top-0 right-[-350px] w-80 h-full bg-white shadow-lg p-4 transition-all duration-300 overflow-y-auto" id="cart-container">
+        <h3 class="text-xl font-bold mb-4">Shopping Cart</h3>
+        <div id="cart-items"></div>
+        <a href="delevry.html">
+            <button onclick="window.location.href='delivery.html'" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 mt-4 rounded">
+                Proceed to Checkout
+            </button>
+            
+            <script>
+                function redirectToDelivery() {
+                    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+                    let user = JSON.parse(localStorage.getItem("user"));
+            
+                    if (!user) {
+                        alert("Please login first!");
+                        window.location.href = "login.html";
+                        return;
+                    }
+            
+                    if (cart.length === 0) {
+                        alert("Your cart is empty!");
+                        return;
+                    }
+            
+                    window.location.href = "delivery.html";
+                }
+            </script>
+
+      </a>
+    </div>
+    
+    <script>
+        function toggleCart() {
+            let cartContainer = document.getElementById("cart-container");
+            cartContainer.style.right = cartContainer.style.right === "0px" ? "-350px" : "0px";
+        }
+
+        function addToCart(name, price) {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            cart.push({ name, price });
+            localStorage.setItem("cart", JSON.stringify(cart));
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let cartContainer = document.getElementById("cart-items");
+            let cartCount = document.getElementById("cart-count");
+            
+            cartContainer.innerHTML = "";
+            cart.forEach((item, index) => {
+                let cartItem = document.createElement("div");
+                cartItem.classList.add("flex", "justify-between", "bg-gray-200", "p-2", "rounded", "mb-2");
+                cartItem.innerHTML = `<p>${item.name} - $${item.price}</p> <button onclick="removeFromCart(${index})" class='text-red-500'>❌</button>`;
+                cartContainer.appendChild(cartItem);
+            });
+            
+            cartCount.textContent = cart.length;
+            cartCount.style.display = cart.length > 0 ? "block" : "none";
+        }
+
+        function removeFromCart(index) {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            cart.splice(index, 1);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            updateCartUI();
+        }
+        
+        document.addEventListener("DOMContentLoaded", updateCartUI);
+    </script>
+
+<div class="relative bg-gradient-to-br from-primary-50 to-white dark:from-gray-800 dark:to-gray-900">
+  <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Product Cards with Enhanced Design -->
+          <div class="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
+              <a href="5.html">
+                  <img src="https://images.unsplash.com/photo-1649261191624-ca9f79ca3fc6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8NDd8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                          alt="Product" class="h-80 w-72 object-cover rounded-t-xl" />
+                  <div class="px-4 py-3 w-72">
+                      <span class="text-gray-400 mr-3 uppercase text-xs">Brand</span>
+                      <p class="text-lg font-bold text-black truncate block capitalize">Product Name</p>
+                      <div class="flex items-center">
+                          <p class="text-lg font-semibold text-black cursor-auto my-3">$149</p>
+                          <del>
+                              <p class="text-sm text-gray-600 cursor-auto ml-2">$199</p>
+                          </del>
+                          <div class="ml-auto"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                  fill="currentColor" class="bi bi-bag-plus" viewBox="0 0 16 16">
+                                  <path fill-rule="evenodd"
+                                      d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z" />
+                                  <path
+                                      d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+                              </svg></div>
+                      </div>
+                  </div>
+              </a>
+          </div>
+
+          <!-- Additional Product Cards with Similar Enhanced Design -->
+          <div class="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
+              <a href="6.html">
+                  <img src="https://images.unsplash.com/photo-1649261191624-ca9f79ca3fc6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8NDd8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                          alt="Product" class="h-80 w-72 object-cover rounded-t-xl" />
+                  <div class="px-4 py-3 w-72">
+                      <span class="text-gray-400 mr-3 uppercase text-xs">Brand</span>
+                      <p class="text-lg font-bold text-black truncate block capitalize">Product Name</p>
+                      <div class="flex items-center">
+                          <p class="text-lg font-semibold text-black cursor-auto my-3">$149</p>
+                          <del>
+                              <p class="text-sm text-gray-600 cursor-auto ml-2">$199</p>
+                          </del>
+                          <div class="ml-auto"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                  fill="currentColor" class="bi bi-bag-plus" viewBox="0 0 16 16">
+                                  <path fill-rule="evenodd"
+                                      d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z" />
+                                  <path
+                                      d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+                              </svg></div>
+                      </div>
+                  </div>
+              </a>
+          </div>
+
+          <!-- Two More Product Cards -->
+          <div class="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
+              <a href="7.html">
+                  <img src="https://images.unsplash.com/photo-1651950540805-b7c71869e689?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8Mjl8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                          alt="Product" class="h-80 w-72 object-cover rounded-t-xl" />
+                  <div class="px-4 py-3 w-72">
+                      <span class="text-gray-400 mr-3 uppercase text-xs">Brand</span>
+                      <p class="text-lg font-bold text-black truncate block capitalize">Product Name</p>
+                      <div class="flex items-center">
+                          <p class="text-lg font-semibold text-black cursor-auto my-3">$149</p>
+                          <del>
+                              <p class="text-sm text-gray-600 cursor-auto ml-2">$199</p>
+                          </del>
+                          <div class="ml-auto"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                  fill="currentColor" class="bi bi-bag-plus" viewBox="0 0 16 16">
+                                  <path fill-rule="evenodd"
+                                      d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z" />
+                                  <path
+                                      d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+                              </svg></div>
+                      </div>
+                  </div>
+              </a>
+          </div>
+
+          <div class="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
+              <a href="8.html">
+                  <img src="https://images.unsplash.com/photo-1649261191624-ca9f79ca3fc6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8NDd8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                          alt="Product" class="h-80 w-72 object-cover rounded-t-xl" />
+                  <div class="px-4 py-3 w-72">
+                      <span class="text-gray-400 mr-3 uppercase text-xs">Brand</span>
+                      <p class="text-lg font-bold text-black truncate block capitalize">Product Name</p>
+                      <div class="flex items-center">
+                          <p class="text-lg font-semibold text-black cursor-auto my-3">$149</p>
+                          <del>
+                              <p class="text-sm text-gray-600 cursor-auto ml-2">$199</p>
+                          </del>
+                          <div class="ml-auto"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                  fill="currentColor" class="bi bi-bag-plus" viewBox="0 0 16 16">
+                                  <path fill-rule="evenodd"
+                                      d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z" />
+                                  <path
+                                      d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+                              </svg></div>
+                      </div>
+                  </div>
+              </a>
+          </div>
+  </div>
+</div>
+<script src="cart.js"></script>
+<script>
+    function placeOrder() {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let user = JSON.parse(localStorage.getItem("user"));
+
+        if (!user) {
+            alert("Please login first!");
+            window.location.href = "login.html";
+            return;
+        }
+
+        let address = prompt("Enter your delivery address:");
+        if (!address) {
+            alert("Address is required for delivery!");
+            return;
+        }
+
+        let orders = JSON.parse(localStorage.getItem("orders")) || [];
+        
+        let newOrder = {
+            id: Date.now(),  // Unique Order ID
+            user: user.username,
+            email: user.email,
+            address: address,
+            items: cart,
+            total: cart.reduce((sum, item) => sum + item.price, 0),
+            status: "Pending"  // Default status
+        };
+
+        orders.push(newOrder);
+        localStorage.setItem("orders", JSON.stringify(orders));
+        localStorage.removeItem("cart");
+
+        alert("Order placed successfully!");
+        window.location.href = "dashboard.html"; // Redirect to Admin Dashboard
+    }
+</script>
+
+</body>
+</html>
